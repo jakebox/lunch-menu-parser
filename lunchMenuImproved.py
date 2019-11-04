@@ -7,6 +7,7 @@
 import pdftotext
 from six.moves.urllib.request import urlopen
 import io
+import sys
 
 # Getting the lunch menu PDF and putting it into a variable
 url = 'https://fwparker.myschoolapp.com/ftpimages/1048/download/download_3453838.pdf'
@@ -14,6 +15,9 @@ remote_file = urlopen(url).read()
 memory_file = io.BytesIO(remote_file)
 pdf = pdftotext.PDF(memory_file)
 pdf_content = pdf[0]
+
+# Getting the requested day
+day_requested = str(sys.argv[1]).title()
 
 # Turning the string into list (each word is its own element)
 menu = pdf_content.split()
@@ -30,8 +34,8 @@ for item in menu:
 for day, spot in dict.items():
     dict[day] = menu.index(day)
 
-day_requested = input("What day do you want to know the menu for? ")
-day_requested = day_requested.title()
+#day_requested = input("What day do you want to know the menu for? ")
+#day_requested = day_requested.title()
 # Finding and setting the end of each day's meal list. Could probably be shorter.
 if day_requested == "Monday":
     end_day_pos = menu.index("Tuesday:")
@@ -45,4 +49,4 @@ elif day_requested == "Friday":
     end_day_pos = len(menu)
 
 # Printing the menu/outputting your selection
-print("\n" + ' '.join(menu[dict.get(day_requested + ":"):end_day_pos]))
+print(' '.join(menu[dict.get(day_requested + ":"):end_day_pos]))
